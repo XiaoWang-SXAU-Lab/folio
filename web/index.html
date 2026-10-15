@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Folio · 学术主页编辑器</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+<link rel="stylesheet" href="/vendor/bootstrap.min.css">
+<link rel="stylesheet" href="/vendor/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- ============ 侧边栏 ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="/app-icon.png" alt="" class="sidebar-logo" onerror="this.style.display='none'">
+      <div>
+        <div class="sidebar-title">Folio</div>
+        <div class="sidebar-sub">学术主页编辑器</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="nav">
+      <button data-tab="dashboard" class="active"><i class="bi bi-speedometer2"></i>概览</button>
+      <button data-tab="profile"><i class="bi bi-person-badge"></i>资料</button>
+      <button data-tab="papers"><i class="bi bi-journal-bookmark-fill"></i>论文</button>
+      <button data-tab="blog"><i class="bi bi-pen-fill"></i>博客</button>
+      <button data-tab="site"><i class="bi bi-puzzle-fill"></i>站点内容</button>
+      <button data-tab="preview"><i class="bi bi-display"></i>站点预览</button>
+    </nav>
+
+    <div class="sidebar-foot" id="foot">
+      <div class="spinner-border spinner-border-sm text-light opacity-50" role="status"></div>
+    </div>
+  </aside>
+
+  <!-- ============ 主区域 ============ -->
+  <div class="main-area">
+    <header class="topbar">
+      <button class="btn btn-outline-secondary btn-sm d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('show')">
+        <i class="bi bi-list"></i>
+      </button>
+      <h1 class="page-title" id="page-title">概览</h1>
+
+      <span class="badge rounded-pill text-bg-light border" id="save-pill">
+        <span class="status-dot" id="save-dot"></span><span id="save-text">已同步</span>
+      </span>
+      <span class="badge rounded-pill text-bg-light border" id="build-pill" title="构建状态">
+        <span class="status-dot" id="build-dot"></span><span id="build-text">未构建</span>
+      </span>
+
+      <button class="btn btn-success btn-sm" id="btn-build"><i class="bi bi-arrow-clockwise"></i> 立即构建</button>
+      <button class="btn btn-outline-secondary btn-sm" id="btn-open-preview" title="在新标签页打开当前预览">
+        <i class="bi bi-box-arrow-up-right"></i> 新标签打开
+      </button>
+    </header>
+
+    <main class="content" id="view"></main>
+  </div>
+</div>
+
+<script src="/vendor/bootstrap.bundle.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

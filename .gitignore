@@ -1,0 +1,16 @@
+# 构建产物与打包
+dist/
+*.dmg
+
+# 本地二进制与脚本
+home-editor
+启动.command
+
+# 系统与编辑器垃圾
+.DS_Store
+*.bak
+*.log
+
+# Go
+*.test
+*.out

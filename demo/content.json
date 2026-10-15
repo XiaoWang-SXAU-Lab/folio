@@ -1,0 +1,45 @@
+{
+  "publications": [
+    {
+      "authors": "Snape, S., & Prince, H. B.",
+      "year": 1996,
+      "title": "Half-Blood Prince's annotated methods for the Draught of Living Death: a reproducible protocol",
+      "journal": "Journal of Potioneering, 12(3), 88",
+      "doi": "10.9999/pot.1996.012",
+      "role": "first"
+    },
+    {
+      "authors": "Snape, S.",
+      "year": 1993,
+      "title": "Veritaserum stability under cauldron temperature fluctuations: a seven-year trial",
+      "journal": "Advanced Potion-Making, 45(2), 201",
+      "doi": "10.9999/pot.1993.045",
+      "role": "first"
+    },
+    {
+      "authors": "Sprout, P., Snape, S., & McGonagall, M.",
+      "year": 1990,
+      "title": "Cross-species herbological reactivity of moonstone distillate in restorative draughts",
+      "journal": "Transactions of the Hogwarts Society, 78(4), 512",
+      "doi": "10.9999/pot.1990.078",
+      "role": "cofirst"
+    },
+    {
+      "authors": "Dumbledore, A., Snape, S., & Flitwick, F.",
+      "year": 1997,
+      "title": "Ligature of the soul: long-term containment chemistry and ethical boundaries",
+      "journal": "Annals of Defensive Arts, 3(1), 1",
+      "doi": "10.9999/pot.1997.003",
+      "role": "collaborator"
+    },
+    {
+      "authors": "Snape, S.",
+      "year": 1985,
+      "title": "On the precise order of ingredient addition in the Wolfsbane Potion",
+      "journal": "Cauldron Quarterly, 9(1), 14",
+      "doi": "10.9999/pot.1985.009",
+      "role": "first"
+    }
+  ],
+  "posts": []
+}

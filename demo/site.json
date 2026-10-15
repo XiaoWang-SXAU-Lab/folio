@@ -1,0 +1,126 @@
+{
+  "hero": {
+    "personal": {
+      "intro_zh": "我的研究贯穿魔药学、魔法材料学与黑魔法防御术，探索药剂分子在坩埚中的相互作用与边界。",
+      "intro_en": "My research spans potion-making, magical materials and defence against the dark arts, probing how potion molecules interact at the edge of the cauldron.",
+      "label_zh": "魔药学 / 魔法材料学",
+      "label_en": "POTIONEERING / MAGICAL MATERIALS"
+    },
+    "lab": {
+      "title_zh": "熬制魔药，<br>连接咒语与发现。",
+      "title_en": "Brewing potions,<br>binding spells to discovery.",
+      "intro_zh": "围绕魔药学、魔法材料与防御术，开发开放、可复现的配方与实验流程。",
+      "intro_en": "We explore potions, magical materials and defensive arts through open, reproducible recipes and protocols."
+    }
+  },
+  "research_interests": {
+    "zh": "魔药学、魔法材料学、黑魔法防御、药剂可复现性。",
+    "en": "Potion-making; magical materials; defence against the dark arts; potion reproducibility."
+  },
+  "research": [
+    {
+      "title_zh": "魔药学",
+      "title_en": "Potioneering",
+      "desc_zh": "面向大规模坩埚数据的配方分析方法，探索药剂注释、材料来源推断与功能模块。",
+      "desc_en": "Developing methods for large-scale cauldron data, ingredient annotation, origin inference and functional module analysis."
+    },
+    {
+      "title_zh": "魔法材料与防御术",
+      "title_en": "Magical materials & defence",
+      "desc_zh": "整合材料学、咒语学与黑魔法防御，研究药剂与结界相互作用的分子机制。",
+      "desc_en": "Integrating materials, spellwork and defensive theory to study how potions interact with wards at the molecular level."
+    },
+    {
+      "title_zh": "开放配方与可复现实验",
+      "title_en": "Open recipes & reproducibility",
+      "desc_zh": "使用标准化坩埚与工作流系统，把魔药配方转化为易于复现、可共享的科研工具。",
+      "desc_en": "Turning potion recipes into accessible, reusable research tools with standardized cauldrons and reproducible workflows."
+    }
+  ],
+  "education": [
+    {
+      "dates": "1978.09 – 1980.06",
+      "degree_zh": "黑魔法防御术进修 · 巫师等级认证",
+      "degree_en": "Advanced Defence Studies, Wizarding Certification",
+      "school_zh": "霍格沃兹魔法学校",
+      "school_en": "Hogwarts School of Witchcraft and Wizardry"
+    },
+    {
+      "dates": "1971.09 – 1978.06",
+      "degree_zh": "普通巫师等级 · 魔药学 / 黑魔法防御",
+      "degree_en": "O.W.L. & N.E.W.T., Potions / Defence Against the Dark Arts",
+      "school_zh": "霍格沃兹魔法学校 · 斯莱特林学院",
+      "school_en": "Hogwarts School of Witchcraft and Wizardry, Slytherin"
+    }
+  ],
+  "experience": [
+    {
+      "dates": "1996.09 – 1997.06",
+      "title_zh": "黑魔法防御术教授",
+      "title_en": "Professor of Defence Against the Dark Arts",
+      "org_zh": "霍格沃兹魔法学校",
+      "org_en": "Hogwarts School of Witchcraft and Wizardry"
+    },
+    {
+      "dates": "1981.09 – 1997.06",
+      "title_zh": "魔药学教授 · 斯莱特林院长",
+      "title_en": "Professor of Potions, Head of Slytherin",
+      "org_zh": "霍格沃兹魔法学校",
+      "org_en": "Hogwarts School of Witchcraft and Wizardry"
+    }
+  ],
+  "tools": [
+    {
+      "name": "CauldronPy",
+      "desc_zh": "大规模坩埚数据分析流程",
+      "desc_en": "A pipeline for large-scale cauldron datasets.",
+      "url": "https://github.com/Hogwarts-Potions-Lab/CauldronPy",
+      "tag": "PYTHON / POTIONEERING"
+    },
+    {
+      "name": "VeritaShiny",
+      "desc_zh": "吐真剂稳定性交互式分析",
+      "desc_en": "Interactive analysis of Veritaserum stability.",
+      "url": "https://github.com/Hogwarts-Potions-Lab/VeritaShiny",
+      "tag": "R / SHINY"
+    }
+  ],
+  "funding": [
+    {
+      "zh": "主持霍格沃兹科研基金：生死水可复现配方研究（HW1985-003，1985 年立项，500 加隆，已结项）。",
+      "en": "Principal investigator, Hogwarts Research Fund HW1985-003: reproducible protocols for the Draught of Living Death (awarded 1985; 500 Galleons; completed)."
+    },
+    {
+      "zh": "1996 年度霍格沃兹魔药学会突出贡献奖：狼毒药剂配方改良。",
+      "en": "Distinguished Contribution Award, Hogwarts Potioneering Society, for improvements to the Wolfsbane Potion (1996)."
+    }
+  ],
+  "software_copyright": {
+    "text": "CauldronPy V1.0.0 · HW-SOFT-1996-014 · 1996-11-03.",
+    "note_zh": "共同著作权人。",
+    "note_en": "Co-copyright holder."
+  },
+  "patents": [
+    {
+      "zh": "狼毒药剂低温缓释配方及其制备方法",
+      "en": "Low-temperature sustained-release formulation of the Wolfsbane Potion",
+      "number": "HW-PAT-1993-077"
+    },
+    {
+      "zh": "基于月长石蒸馏物的恢复药剂稳定化工艺",
+      "en": "Stabilization process for restorative draughts using moonstone distillate",
+      "number": "HW-PAT-1990-112"
+    }
+  ],
+  "teaching": {
+    "zh": "可承担课程：魔药学、黑魔法防御术、高级药剂配制、材料魔法学。",
+    "en": "Teaching areas: Potions, Defence Against the Dark Arts, Advanced Potion-Making, Materials Magic.",
+    "skills": "Cauldron calibration · Ingredient profiling · Warded distillation · Potion reproducibility · Dark artefact containment"
+  },
+  "contact": {
+    "heading_zh": "交流与合作",
+    "heading_en": "Get in touch",
+    "blurb_zh": "欢迎围绕魔药配方、魔法材料与可复现实验交流。",
+    "blurb_en": "For conversations about potion recipes, magical materials and reproducible experiments."
+  }
+}
