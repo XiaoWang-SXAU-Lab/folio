@@ -14,3 +14,4 @@ home-editor
 # Go
 *.test
 *.out
+*.syso

@@ -21,6 +21,14 @@ Folio 是一个本地运行的学术网站编辑器：用 Dashboard 界面编辑
    - 把自己的数据目录放到 `/Applications/academic-web/`，或用命令行 `-data` 参数指定，即可编辑自己的网站
 3. 界面内修改自动保存并重建，在「站点预览」页查看效果
 
+## 快速开始（Windows）
+
+1. 在 [Releases](../../releases) 下载最新的 `Folio-x.y.z-windows-x64.zip`，解压到任意目录
+2. 双击 `Folio.exe`（需要系统装有 [WebView2 运行时](https://developer.microsoft.com/microsoft-edge/webview2/)，Win10/11 一般自带）：
+   - 首次启动自动使用 exe 旁的**演示数据**（斯内普教授示例站），拷贝到 `%USERPROFILE%\Folio\demo` 后运行
+   - 把自己的数据目录放在 exe 旁的 `academic-web/`，或用命令行 `-data` 参数指定，即可编辑自己的网站
+3. 界面内修改自动保存并重建，在「站点预览」页查看效果
+
 ## 换成自己的数据
 
 数据目录结构（即本仓库 `demo/` 的样子）：
@@ -62,8 +70,19 @@ CGO_ENABLED=1 go build -tags webview -o folio .
 
 CGO 不能跨平台编译，Windows 版需要在 Windows 上构建：
 
-1. 安装 [Go](https://go.dev/dl/) 和 [MSYS2](https://www.msys2.org/)（`pacman -S mingw-w64-ucrt-x86_64-gcc`）
-2. `set CGO_ENABLED=1 && go build -tags webview -ldflags "-H windowsgui" -o folio.exe .`
+1. 安装 [Go](https://go.dev/dl/) 和 [MSYS2](https://www.msys2.org/)（`pacman -S mingw-w64-ucrt-x86_64-gcc`），或便携版 [w64devkit](https://github.com/skeeto/w64devkit)
+2. 一键打包（嵌入图标与版本信息，产出 exe + zip 发行包）：
+
+```bash
+./build-win.sh   # 产物：dist/Folio.exe + dist/Folio-x.y.z-windows-x64.zip
+```
+
+也可以只编译 exe：
+
+```bash
+windres -i folio.rc -O coff -o folio.syso   # 可选：嵌入图标
+set CGO_ENABLED=1 && go build -tags webview -ldflags "-H windowsgui" -o folio.exe .
+```
 
 ## 构建网站的其他依赖
 
