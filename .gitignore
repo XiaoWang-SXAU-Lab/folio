@@ -4,6 +4,7 @@ dist/
 
 # 本地二进制与脚本
 home-editor
+pandoc.exe
 启动.command
 
 # 系统与编辑器垃圾

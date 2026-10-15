@@ -44,6 +44,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "dist\Folio.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "pandoc.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "demo\*"; DestDir: "{app}\demo"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
