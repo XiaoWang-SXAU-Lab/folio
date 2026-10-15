@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -632,8 +633,8 @@ func main() {
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			// 编辑器静态资源
-			clean := filepath.Clean("/" + strings.TrimPrefix(r.URL.Path, "/"))
-			full := filepath.Join("web", clean)
+			clean := path.Clean("/" + strings.TrimPrefix(r.URL.Path, "/"))
+			full := path.Join("web", clean)
 			if b, err := fs.ReadFile(webFS, full); err == nil {
 				ct := "application/octet-stream"
 				switch filepath.Ext(full) {
