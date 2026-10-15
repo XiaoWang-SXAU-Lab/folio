@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 APP_NAME="Folio"
 DIST="dist"
 APP_DIR="$DIST/$APP_NAME.app"
@@ -34,9 +34,9 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
     <key>CFBundleIdentifier</key>
     <string>com.folio.editor</string>
     <key>CFBundleVersion</key>
-    <string>2.0.0</string>
+    <string>2.1.0</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.0.0</string>
+    <string>2.1.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleExecutable</key>
