@@ -77,17 +77,23 @@ func runBuild(reason string) {
 	cmd := exec.Command(pythonBin, "build.py")
 	cmd.Dir = dataDir
 	// 防御性补充 PATH：程序旁（内置 pandoc）+ macOS 常见位置，确保找得到 pandoc
+	// 注意 Windows 环境变量大小写不敏感，通常是 "Path" 而非 "PATH"
 	sep := string(os.PathListSeparator)
 	extra := "/opt/homebrew/bin" + sep + "/usr/local/bin"
 	if exe, err := os.Executable(); err == nil {
 		extra = filepath.Dir(exe) + sep + extra
 	}
 	env := os.Environ()
+	found := false
 	for i, e := range env {
-		if strings.HasPrefix(e, "PATH=") {
-			env[i] = "PATH=" + extra + sep + e[5:]
+		if len(e) >= 5 && strings.EqualFold(e[:5], "PATH=") {
+			env[i] = e[:5] + extra + sep + e[5:]
+			found = true
 			break
 		}
+	}
+	if !found {
+		env = append(env, "PATH="+extra)
 	}
 	cmd.Env = env
 	out, err := cmd.CombinedOutput()
