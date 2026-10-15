@@ -42,7 +42,7 @@ const state = {
 };
 
 const TITLES = {
-  dashboard: '概览', profile: '资料', papers: '论文', blog: '博客', site: '站点内容', preview: '站点预览',
+  dashboard: '概览', profile: '资料', papers: '论文', blog: '博客', site: '站点内容', theme: '主题', preview: '站点预览',
 };
 
 /* ================= 构建状态轮询 ================= */
@@ -631,6 +631,119 @@ function renderPreview(view) {
   }
 }
 
+/* ================= Tab · 主题 ================= */
+
+let themeDraft = null; // { yaml, current, list }
+
+function themeSwatches(colors) {
+  const wrap = el('span', { class: 'd-inline-flex gap-1 align-items-center' });
+  ['bg', 'primary', 'accent', 'ink'].forEach(k => {
+    const c = colors?.[k];
+    if (c) wrap.append(el('span', {
+      class: 'rounded-circle d-inline-block border',
+      style: `width:16px;height:16px;background:${c}`,
+      title: `${k}: ${c}`,
+    }));
+  });
+  return wrap;
+}
+
+async function loadThemeState() {
+  const [cur, list] = await Promise.all([
+    api('/api/theme'),
+    fetch('/themes/index.json').then(r => r.json()),
+  ]);
+  themeDraft = { yaml: cur.yaml || '', current: cur.current || null, list };
+}
+
+async function applyThemeYAML(yaml) {
+  const r = await fetch('/api/theme', { method: 'PUT', headers: { 'Content-Type': 'text/plain' }, body: yaml });
+  if (!r.ok) {
+    const msg = await r.text();
+    setSave('主题保存失败：' + msg, 'err');
+    throw new Error(msg);
+  }
+  const j = await r.json();
+  setSave('主题已应用：' + j.name, 'ok');
+  await loadThemeState();
+  return j;
+}
+
+async function renderTheme(view) {
+  if (!themeDraft) { try { await loadThemeState(); } catch (e) { /* 忽略 */ } }
+  const ta = el('textarea', {
+    class: 'form-control font-monospace', rows: 16, spellcheck: 'false',
+    style: 'font-size:12.5px', value: themeDraft?.yaml ?? '',
+  });
+
+  const listCard = el('div', { class: 'card-body d-flex flex-column gap-2' });
+  (themeDraft?.list || []).forEach(t => {
+    const active = themeDraft?.current === t.name;
+    const btn = el('button', { class: 'btn ' + (active ? 'btn-success' : 'btn-outline-secondary') + ' d-flex align-items-center gap-2' },
+      el('span', { class: 'fw-semibold' }, t.name + (active ? ' ✓ 使用中' : '')),
+      el('span', { class: 'hint' }, t.description || ''));
+    btn.onclick = async () => {
+      const yaml = await fetch('/themes/' + t.file).then(r => r.text());
+      try {
+        await applyThemeYAML(yaml);
+        renderThemeRefresh(view);
+      } catch (e) { /* setSave 已提示 */ }
+    };
+    listCard.append(el('div', { class: 'd-flex align-items-center gap-2 flex-wrap' }, btn, themeSwatches(themeColorMap[t.key])));
+  });
+
+  const fileInput = el('input', { type: 'file', accept: '.yaml,.yml', class: 'form-control w-auto' });
+  fileInput.onchange = async () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    try {
+      await applyThemeYAML(await f.text());
+      renderThemeRefresh(view);
+    } catch (e) { /* setSave 已提示 */ }
+  };
+
+  view.append(
+    el('div', { class: 'card mb-3' },
+      el('div', { class: 'card-header' }, '内置主题'),
+      listCard),
+    el('div', { class: 'card mb-3' },
+      el('div', { class: 'card-header' }, '自定义主题（YAML）'),
+      el('div', { class: 'card-body' },
+        el('p', { class: 'hint' }, '直接编辑下方 YAML 点「保存主题」，或上传符合格式的 .yaml 文件。字段：name / colors（bg、paper、ink、muted、line、primary、primary_dark、accent、wash）/ font_heading，颜色用 #rrggbb。'),
+        ta,
+        el('div', { class: 'd-flex gap-2 mt-3 flex-wrap' },
+          el('button', {
+            class: 'btn btn-success', onclick: async () => {
+              try { await applyThemeYAML(ta.value); renderThemeRefresh(view); } catch (e) { /* 已提示 */ }
+            },
+          }, el('i', { class: 'bi bi-check-lg' }), ' 保存主题'),
+          el('button', {
+            class: 'btn btn-outline-secondary', onclick: async () => {
+              await fetch('/api/theme', { method: 'DELETE' });
+              setSave('已恢复默认主题', 'ok');
+              themeDraft = null;
+              renderThemeRefresh(view);
+            },
+          }, '恢复默认'),
+          fileInput,
+        ))),
+  );
+}
+
+// 各内置主题的色板（与 themes/*.yaml 对应，用于卡片上展示色块）
+const themeColorMap = {
+  forest: { bg: '#f9f8f3', primary: '#286449', accent: '#b98646', ink: '#233b32' },
+  ocean: { bg: '#f5f8fa', primary: '#2a5d8f', accent: '#c07a3a', ink: '#1c2b36' },
+  crimson: { bg: '#faf6f4', primary: '#8f2a2a', accent: '#b08a2e', ink: '#3b2323' },
+  ink: { bg: '#17191c', primary: '#7fb98a', accent: '#d0a860', ink: '#e8e6e1' },
+};
+
+async function renderThemeRefresh(view) {
+  view.innerHTML = '';
+  themeDraft = null;
+  await renderTheme(view);
+}
+
 /* ================= Tab 框架 ================= */
 
 const TABS = {
@@ -639,6 +752,7 @@ const TABS = {
   papers: { render: renderPapers, save: savePapers },
   blog: { render: renderBlog, save: saveBlog },
   site: { render: renderSite, save: saveSite },
+  theme: { render: renderTheme, save: async () => {} },
   preview: { render: renderPreview, save: async () => {} },
 };
 

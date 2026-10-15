@@ -76,6 +76,27 @@ CGO 不能跨平台编译，Windows 版需要在 Windows 上构建：
 - **GitHub Pages**：把数据目录 push 到仓库，用 Actions 或本地构建后把 `dist/` 推到 `gh-pages` 分支
 - **自己的服务器**：把 `dist/` 里的静态文件上传到 Web 目录（nginx/apache 均可）
 
+## 主题
+
+Folio 内置 4 套主题（松林绿 / 海洋蓝 / 绛红 / 墨色），在「主题」页一键切换；也可以上传自定义 YAML 主题文件，或直接编辑 YAML 文本 DIY。更多主题与格式说明见 [folio-themes](https://github.com/XiaoWang-SXAU-Lab/folio-themes)。
+
+```yaml
+name: 我的主题
+colors:
+  bg: "#f5f8fa"        # 页面背景
+  paper: "#ffffff"     # 卡片/纸张底色
+  ink: "#1c2b36"       # 正文文字
+  muted: "#5d707c"     # 次要文字
+  line: "#d8e2ea"      # 边框分隔线
+  primary: "#2a5d8f"   # 主色（按钮、链接、强调）
+  primary_dark: "#1f4769"  # 主色悬停
+  accent: "#c07a3a"    # 点缀色（引用、图标）
+  wash: "#e8f0f6"      # 浅色块背景
+font_heading: "'Libre Caslon Display', Georgia, serif"  # 可选：标题字体
+```
+
+所有字段可选；主题保存在数据目录的 `theme.yaml` / `theme.json`，删除即恢复默认。
+
 ## 数据放在哪里
 
 推荐把数据目录放到私有 Git 仓库托管（网站内容是公开信息，但方便多机同步与版本历史）。Folio 按以下顺序查找数据目录：

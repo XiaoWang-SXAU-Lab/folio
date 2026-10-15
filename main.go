@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"runtime"
 	"sort"
@@ -23,6 +24,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
 
 //go:embed web
@@ -422,6 +425,99 @@ func previewHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, f)
 }
 
+// ---------- 主题（YAML → theme.json） ----------
+
+type themeColors struct {
+	Bg          string `json:"bg" yaml:"bg"`
+	Paper       string `json:"paper" yaml:"paper"`
+	Ink         string `json:"ink" yaml:"ink"`
+	Muted       string `json:"muted" yaml:"muted"`
+	Line        string `json:"line" yaml:"line"`
+	Primary     string `json:"primary" yaml:"primary"`
+	PrimaryDark string `json:"primary_dark" yaml:"primary_dark"`
+	Accent      string `json:"accent" yaml:"accent"`
+	Wash        string `json:"wash" yaml:"wash"`
+}
+
+type themeFile struct {
+	Name        string      `json:"name" yaml:"name"`
+	Key         string      `json:"key,omitempty" yaml:"key"`
+	Description string      `json:"description,omitempty" yaml:"description"`
+	Colors      themeColors `json:"colors" yaml:"colors"`
+	FontHeading string      `json:"font_heading,omitempty" yaml:"font_heading"`
+}
+
+var hexRe = regexp.MustCompile(`^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$`)
+
+func validateTheme(th *themeFile) error {
+	if strings.TrimSpace(th.Name) == "" {
+		return errors.New("主题缺少 name 字段")
+	}
+	v := reflect.ValueOf(th.Colors)
+	typ := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		c := v.Field(i).String()
+		if c == "" {
+			continue // 允许留空（回退默认）
+		}
+		if !hexRe.MatchString(c) {
+			return fmt.Errorf("colors.%s 不是合法颜色: %q（应为 #rrggbb 或 #rgb）", typ.Field(i).Tag.Get("yaml"), c)
+		}
+	}
+	return nil
+}
+
+func themeHandler(w http.ResponseWriter, r *http.Request) {
+	yamlPath := filepath.Join(dataDir, "theme.yaml")
+	jsonPath := filepath.Join(dataDir, "theme.json")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	switch r.Method {
+	case "GET":
+		yamlB, _ := os.ReadFile(yamlPath)
+		resp := map[string]any{"yaml": string(yamlB)}
+		if jsonB, err := os.ReadFile(jsonPath); err == nil {
+			var th themeFile
+			if json.Unmarshal(jsonB, &th) == nil {
+				resp["current"] = th.Name
+			}
+		}
+		json.NewEncoder(w).Encode(resp)
+	case "PUT":
+		body, err := io.ReadAll(io.LimitReader(r.Body, 1<<20))
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			return
+		}
+		var th themeFile
+		if err := yaml.Unmarshal(body, &th); err != nil {
+			http.Error(w, "YAML 解析失败: "+err.Error(), 400)
+			return
+		}
+		if err := validateTheme(&th); err != nil {
+			http.Error(w, err.Error(), 400)
+			return
+		}
+		jsonB, _ := json.Marshal(th)
+		if err := os.WriteFile(jsonPath, jsonB, 0644); err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+		if err := os.WriteFile(yamlPath, body, 0644); err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+		scheduleBuild()
+		json.NewEncoder(w).Encode(map[string]any{"ok": true, "name": th.Name})
+	case "DELETE":
+		os.Remove(yamlPath)
+		os.Remove(jsonPath)
+		scheduleBuild()
+		fmt.Fprint(w, `{"ok":true}`)
+	default:
+		http.Error(w, "method not allowed", 405)
+	}
+}
+
 // ---------- 入口 ----------
 
 func resolveDataDir(flagDir string) (string, error) {
@@ -584,6 +680,7 @@ func main() {
 	mux.HandleFunc("/api/posts/", postsHandler)
 	mux.HandleFunc("/api/build", buildHandler)
 	mux.HandleFunc("/api/build/status", buildStatusHandler)
+	mux.HandleFunc("/api/theme", themeHandler)
 	mux.HandleFunc("/preview/", previewHandler)
 
 	addr := ":" + strconv.Itoa(*port)

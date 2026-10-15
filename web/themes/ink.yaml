@@ -1,0 +1,14 @@
+name: 墨色
+key: ink
+description: 深色模式，夜读友好
+colors:
+  bg: "#17191c"
+  paper: "#1f2226"
+  ink: "#e8e6e1"
+  muted: "#9aa0a6"
+  line: "#33383e"
+  primary: "#7fb98a"
+  primary_dark: "#5d9768"
+  accent: "#d0a860"
+  wash: "#22262b"
+font_heading: "'Libre Caslon Display', Georgia, serif"

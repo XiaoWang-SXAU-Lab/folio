@@ -1,0 +1,14 @@
+name: 海洋蓝
+key: ocean
+description: 清爽的海洋与天空，适合计算方向
+colors:
+  bg: "#f5f8fa"
+  paper: "#ffffff"
+  ink: "#1c2b36"
+  muted: "#5d707c"
+  line: "#d8e2ea"
+  primary: "#2a5d8f"
+  primary_dark: "#1f4769"
+  accent: "#c07a3a"
+  wash: "#e8f0f6"
+font_heading: "'Libre Caslon Display', Georgia, serif"

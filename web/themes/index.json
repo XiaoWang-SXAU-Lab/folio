@@ -1,0 +1,6 @@
+[
+  {"key": "forest", "file": "forest.yaml", "name": "松林绿", "description": "默认主题，植物学感的暖纸底深绿"},
+  {"key": "ocean", "file": "ocean.yaml", "name": "海洋蓝", "description": "清爽的海洋与天空，适合计算方向"},
+  {"key": "crimson", "file": "crimson.yaml", "name": "绛红", "description": "暖纸底配学院绛红，古典庄重"},
+  {"key": "ink", "file": "ink.yaml", "name": "墨色", "description": "深色模式，夜读友好"}
+]

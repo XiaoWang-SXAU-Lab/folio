@@ -1,0 +1,14 @@
+name: 松林绿
+key: forest
+description: 默认主题，植物学感的暖纸底深绿
+colors:
+  bg: "#f9f8f3"
+  paper: "#fffefa"
+  ink: "#233b32"
+  muted: "#637269"
+  line: "#dce1d6"
+  primary: "#286449"
+  primary_dark: "#1e4f3b"
+  accent: "#b98646"
+  wash: "#eaf0e5"
+font_heading: "'Libre Caslon Display', Georgia, serif"

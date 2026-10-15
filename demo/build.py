@@ -9,6 +9,32 @@ D = json.loads((R / 'content.json').read_text(encoding='utf-8'))
 S = json.loads((R / 'site.json').read_text(encoding='utf-8'))
 OUT = R / 'dist'
 
+# ---------------- 主题 ----------------
+# theme.json 由 Folio 编辑器生成（用户在主题页选择/上传 YAML 后转换而来）
+THEME = {}
+_theme_path = R / 'theme.json'
+if _theme_path.exists():
+    try:
+        THEME = json.loads(_theme_path.read_text(encoding='utf-8'))
+    except Exception:
+        THEME = {}
+COL = THEME.get('colors', {}) if isinstance(THEME, dict) else {}
+PRIMARY = COL.get('primary') or '#286449'
+THEME_LINK = '<link rel="stylesheet" href="../assets/theme.css">' if THEME else ''
+
+def theme_css():
+    c = COL
+    pairs = [('bg', c.get('bg')), ('paper', c.get('paper')), ('ink', c.get('ink')),
+             ('muted', c.get('muted')), ('line', c.get('line')),
+             ('green', c.get('primary')), ('gold', c.get('accent')), ('wash', c.get('wash'))]
+    css = ':root{' + ''.join(f'--{k}:{v};' for k, v in pairs if v) + '}'
+    if c.get('primary_dark'):
+        css += f'.primary:hover{{background:{c["primary_dark"]}}}'
+    f = THEME.get('font_heading')
+    if f:
+        css += f'.hero h1,.posthead h1,.prose h2{{font-family:{f}}}'
+    return css
+
 def e(v):
     return html.escape(str(v), quote=True)
 
@@ -138,7 +164,7 @@ def render(site, page, lang):
     if not lab and P['lab_org']:
         nav += f'<a href="https://{P["lab_org"].lower()}.github.io/{lang}/index.html">{t("实验室", "Lab", lang)} ↗</a>'
     title = dict(pages).get(page, 'CV') + ' · ' + brand
-    return f'<!doctype html><html lang="{t("zh-CN", "en", lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(brand)}"><meta name="theme-color" content="#286449"><link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48"><link rel="apple-touch-icon" href="../assets/lab-icon-180.png"><link rel="stylesheet" href="../assets/style.css"><link rel="alternate" hreflang="{other}" href="../{other}/{page}.html"><script src="../assets/site.js" defer></script></head><body><a class="skip" href="#main">{t("跳至正文", "Skip to content", lang)}</a><header><div class="wrap nav"><a class="brand" href="index.html"><img class="mark" src="../assets/lab-icon-512.png" alt="{e(brand)}" width="40" height="40">{e(brand)}</a><nav aria-label="{t("主导航", "Main navigation", lang)}">{nav}<a class="lang" href="../{other}/{page}.html" lang="{other}">{t("EN", "中文", lang)}</a></nav></div></header><main class="wrap" id="main">{body(site, page, lang)}</main><footer><div class="wrap foot"><span>© 2026 {e(brand)}</span><span><a href="https://github.com/{e(P["lab_org"] if lab and P["lab_org"] else P["github"])}">GitHub ↗</a> &nbsp; / &nbsp; <a href="https://orcid.org/{P["orcid"]}">ORCID ↗</a></span></div></footer></body></html>'
+    return f'<!doctype html><html lang="{t("zh-CN", "en", lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(brand)}"><meta name="theme-color" content="{PRIMARY}"><link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48"><link rel="apple-touch-icon" href="../assets/lab-icon-180.png"><link rel="stylesheet" href="../assets/style.css">{THEME_LINK}<link rel="alternate" hreflang="{other}" href="../{other}/{page}.html"><script src="../assets/site.js" defer></script></head><body><a class="skip" href="#main">{t("跳至正文", "Skip to content", lang)}</a><header><div class="wrap nav"><a class="brand" href="index.html"><img class="mark" src="../assets/lab-icon-512.png" alt="{e(brand)}" width="40" height="40">{e(brand)}</a><nav aria-label="{t("主导航", "Main navigation", lang)}">{nav}<a class="lang" href="../{other}/{page}.html" lang="{other}">{t("EN", "中文", lang)}</a></nav></div></header><main class="wrap" id="main">{body(site, page, lang)}</main><footer><div class="wrap foot"><span>© 2026 {e(brand)}</span><span><a href="https://github.com/{e(P["lab_org"] if lab and P["lab_org"] else P["github"])}">GitHub ↗</a> &nbsp; / &nbsp; <a href="https://orcid.org/{P["orcid"]}">ORCID ↗</a></span></div></footer></body></html>'
 
 def post_page(title, date, body_html):
     brand = P['name_en'] + ' / ' + P['name_zh']
@@ -147,7 +173,7 @@ def post_page(title, date, body_html):
     nav = ''.join(f'<a href="../zh/{p}.html"' + (' aria-current="page"' if p == 'blog' else '') + f'>{label}</a>' for p, label in pages)
     if lab_org:
         nav += f'<a href="https://{lab_org.lower()}.github.io/zh/index.html">实验室 ↗</a>'
-    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)} · {brand}</title><meta name="description" content="{e(title)}"><meta name="theme-color" content="#286449"><link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48"><link rel="apple-touch-icon" href="../assets/lab-icon-180.png"><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/site.js" defer></script></head><body><a class="skip" href="#main">跳至正文</a><header><div class="wrap nav"><a class="brand" href="../zh/index.html"><img class="mark" src="../assets/lab-icon-512.png" alt="{brand}" width="40" height="40">{brand}</a><nav aria-label="主导航">{nav}<a class="lang" href="../en/blog.html" lang="en">EN</a></nav></div></header><main class="wrap" id="main"><article class="postpage"><header class="posthead"><a class="small" href="../zh/blog.html">← {e("博客")}</a><h1>{e(title)}</h1><time>{e(date)}</time></header><div class="prose">{body_html}</div></article></main><footer><div class="wrap foot"><span>© 2026 {brand}</span><span><a href="https://github.com/{e(P["github"])}">GitHub ↗</a> &nbsp; / &nbsp; <a href="https://orcid.org/{P["orcid"]}">ORCID ↗</a></span></div></footer></body></html>'
+    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)} · {brand}</title><meta name="description" content="{e(title)}"><meta name="theme-color" content="{PRIMARY}"><link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48"><link rel="apple-touch-icon" href="../assets/lab-icon-180.png"><link rel="stylesheet" href="../assets/style.css">{THEME_LINK}<link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/site.js" defer></script></head><body><a class="skip" href="#main">跳至正文</a><header><div class="wrap nav"><a class="brand" href="../zh/index.html"><img class="mark" src="../assets/lab-icon-512.png" alt="{brand}" width="40" height="40">{brand}</a><nav aria-label="主导航">{nav}<a class="lang" href="../en/blog.html" lang="en">EN</a></nav></div></header><main class="wrap" id="main"><article class="postpage"><header class="posthead"><a class="small" href="../zh/blog.html">← {e("博客")}</a><h1>{e(title)}</h1><time>{e(date)}</time></header><div class="prose">{body_html}</div></article></main><footer><div class="wrap foot"><span>© 2026 {brand}</span><span><a href="https://github.com/{e(P["github"])}">GitHub ↗</a> &nbsp; / &nbsp; <a href="https://orcid.org/{P["orcid"]}">ORCID ↗</a></span></div></footer></body></html>'
 
 def build():
     for site in ['personal', 'lab']:
@@ -156,6 +182,8 @@ def build():
             shutil.rmtree(dest)
         dest.mkdir(parents=True, exist_ok=True)
         shutil.copytree(R / 'assets', dest / 'assets', dirs_exist_ok=True)
+        if THEME:
+            (dest / 'assets' / 'theme.css').write_text(theme_css(), encoding='utf-8')
         shutil.copy(R / 'assets' / 'favicon.ico', dest / 'favicon.ico')
         (dest / '.nojekyll').write_text('', encoding='utf-8')
         (dest / 'downloads').mkdir(exist_ok=True)

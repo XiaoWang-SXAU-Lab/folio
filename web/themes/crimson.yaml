@@ -1,0 +1,14 @@
+name: 绛红
+key: crimson
+description: 暖纸底配学院绛红，古典庄重
+colors:
+  bg: "#faf6f4"
+  paper: "#fffdfb"
+  ink: "#3b2323"
+  muted: "#796563"
+  line: "#e6d8d3"
+  primary: "#8f2a2a"
+  primary_dark: "#6d1f1f"
+  accent: "#b08a2e"
+  wash: "#f3e8e4"
+font_heading: "'Libre Caslon Display', Georgia, serif"
